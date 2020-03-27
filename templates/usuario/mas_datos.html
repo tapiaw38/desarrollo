@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+
+
+{%block header%}
+{%endblock%}
+
+{% block content %}
+<br>
+<a class="btn btn-primary" href="{%url 'usuario_listar'%}">Volver</a>
+<br>
+<br>
+<div class="col-md-4 order-md-2 mb-3">
+  <div class="card mb-3">
+    <h3 class="card-header">Datos de Solicitud</h3>
+    <div class="card-body">
+      <h5 class="card-title">Solicitud N°{{uduario.id}}</h5>
+
+      <h5 class="card-title">{{usuario.nombre}}</h5>
+      <p class="card-subtitle text-muted">DNI: {{usuario.dni}}</p>
+      <p class="card-subtitle text-muted">Fecha de Nacimiento: {{usuario.fecha}}</p>
+      <p class="card-subtitle text-muted">CUIL: {{usuario.cuil}}</p>
+      <p class="card-subtitle text-muted">TIPO: {{usuario.tipo}}</p>
+      <p class="card-subtitle text-muted">CATEGORIA: {{usuario.categoria}}</p>
+      <p class="card-subtitle text-muted">CBU: {{usuario.cbu}}</p>
+      <p class="card-subtitle text-muted">TEL: {{usuario.tel}}</p>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">ESTADO DE CARGA</h5>
+      {% if usuario.estado == False %}
+      <p class="card-subtitle text-muted">ESTADO: No se cargo el usuario</p>
+      {% else %}
+      <p class="card-subtitle text-muted">ESTADO: Usuario cargado</p>
+      {% endif %}
+      <p class="card-subtitle text-muted">OBSERVACIÓN: {{usuario.observacion}}</p>
+    </div>
+  </div>
+</div>
+<br>
+{% endblock%}

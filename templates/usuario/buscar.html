@@ -1,0 +1,115 @@
+{% extends 'base/base.html' %}
+
+{% block title%}
+Busqueda de Clientes
+{% endblock %}
+
+{%block header%}
+{%endblock%}
+
+{% block content %}
+<h5 class="p-3">Buscar Usuario</h5>
+<a class="btn btn-outline-primary" href="{%url 'usuario_listar'%}">Volver</a>
+<br>
+<br>
+<form class="form-inline my-2 my-lg-0" type="get" method="POST" action="{%url 'usuario_buscar'%}">
+ {% csrf_token %}
+    <input class="form-control mr-sm-2" type="text" placeholder="Search" name="buscalo" id="busca">
+    <button class="btn btn-secondary my-2 my-sm-0" type="submit" href="" id="botonBus">Busqueda por DNI</button>
+</form>
+<br>
+<table class="table table-hover">
+    <thead>
+    <tr class="table-light" >
+        <td scope="col">#</td>
+        <td scope="col">Nombre y Apellido</td>
+        <td scope="col">DNI</td>
+        <td scope="col">Fecha Nacimiento</td>
+        <td scope="col">CUIL</td>
+        <td scope="col">Tipo</td>
+        <td scope="col">TEL</td>
+        <td scope="col">Estado</td>
+        <td scope="col">Datos</td>
+        <td scope="col">Acciones</td>
+    </tr>
+    </thead>
+    <tbody>
+         {% if object_list %}
+        {%for  usuario in object_list%}
+                {% if usuario.estado == True %}
+        <tr class="table-success">
+                {% else %}
+            <tr class="table-light">
+                    {% endif %}
+            <td>{{usuario.id}}</td>
+            <td>{{usuario.nombre}}</td>
+            <td>{{usuario.dni}}</td>
+            <td>{{usuario.fecha}}</td>
+            <!-- Cuil -->
+            {% if usuario.cuil == None %}
+            <td>Sin CUIL</td>
+            {% else %}
+             <td>{{usuario.cuil}}</td>
+            {% endif %}
+            <!-- Tipo -->
+            <td>{{usuario.tipo}}</td>
+            <!-- Telefono -->
+            {% if usuario.tel == None %}
+            <td>Sin Celular</td>
+            {% else %}
+             <td>{{usuario.tel}}</td>
+            {% endif %}
+            <!-- Estado -->
+            {% if usuario.estado == False %}
+            <td>No Cargado</td>
+            {% else %}
+             <td>Cargado</td>
+            {% endif %}
+            <!-- MAS DATOS -->
+                <td>
+                    <ul class="nav nav-pills">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Elegir</a>
+                            <div class="dropdown-menu" style="">
+                              <a class="dropdown-item" href="{%url 'usuario_editar' usuario.id%}">Editar</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="{%url 'mas_datos' usuario.id%}">Ver Más</a>
+                            </div>
+                        </li>
+                    </ul>
+                </td>
+            <td><a class="btn btn-primary" href="{%url 'carga_editar' usuario.id%}">Cargar</a></td>
+        </tr>
+        {%endfor%}
+        {% else %}
+        <div class="alert alert-dismissible alert-warning">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <strong>Ups! </strong>tú busqueda no dio resultados <a href="{%url 'usuario_buscar'%}" class="alert-link">intentalo de nuevo</a>.
+        </div>
+        {%endif%}
+    </tbody>
+</table>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+      {% if clientes.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{ usuarios.previous_page_number }}">Previous</a></li>
+      {% endif%}
+      {% if clientes.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ usuarios.next_page_number }}">Next</a></li>
+      {% endif%}
+  </ul>
+</nav>
+{% endblock%}
+
+{% block js %}
+<script>
+    $(document).ready(function() {
+        $('#botonBus').click(function() {
+            var buscar = $('#busca').val();
+            if (buscar==""){
+                window.alert('Ingresa un DNI para realizar una busqueda');
+            }
+        });
+    });
+</script>
+{% endblock %}
